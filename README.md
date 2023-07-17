@@ -1,1 +1,3 @@
-# mental_health_figure
+# Birds, trees, and mental health
+
+Figure for paper
