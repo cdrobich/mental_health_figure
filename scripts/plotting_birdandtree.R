@@ -1,3 +1,17 @@
+
+# Colours etc.
+
+#Biodiversity - Trees, NDVI, Birds, Green space, Blue space 
+"#386641"
+
+#Health behaviours - fruit & veg consumption, smoking, smoking cessation, alcohol, physical activity
+"#540b0e"
+
+#Socio demographics - education, income, marital status, employment, sex, age, race, time since immigration, born in canada
+"#003566" 
+
+
+
 ## plotting script
 
 mod4t<-read.csv('data/model_selection_tables/adj_mod4_mh_both_ptable_mice_linear.csv')
@@ -30,7 +44,7 @@ modst$X<-recode(modst$X, `(Intercept)`='Intercept',
                married7='Unknown marital status', job1='Employed',
                job2='Unknown employment status',white1='White', 
                white2='Unknown ethnicity',imi2='Non-immigrant (non-white)', 
-               imi3='Immigrant (White, <10 years)',imi7='Unknown immigraiton status',
+               imi3='Immigrant (White, <10 years)',imi7='Unknown immigration status',
                INCDHH='Household income',EHG2DVR32='High school education',
                EHG2DVR33='Post-secondary education',EHG2DVR34='Unknown Education status',DHHE_SEX2='Female', DHH_AGE='Age', treerich='Tree species richness',treediv='Tree Shannon diversity', DistancetoLocation='Distance to nearest ebird hotspot', ModeledSDiv='Modeled bird Shannon diversity',ModeledSRich='Modeled bird species richness', dist_ChaoEstimatedSpRich='Chao-estimated bird species richness',dist_ChaoEstimatedSpDiv='Chao-estimated bird Shannon diversity',  ndvi='Greenness in postalcode (NDVI)',  ndvi500='Greenness within 500m buffer (NDVI)', ndvi1000='Greenness within 1000m buffer (NDVI)',YEAR='Year',bluedist='Distance to blue space', greendist='Distance to green space', PropBlue="Proportion of blue space", PropGreen='Proportion of green space',area_m='Postal code area')
 
@@ -50,7 +64,7 @@ mod4t$X<-recode(mod4t$X, `(Intercept)`='Intercept',
                white1='White', white2='Unknown ethnicity',
                imi2='Non-immigrant (non-white)', 
                imi3='Immigrant (White, <10 years)',
-               imi7='Unknown immigraiton status',
+               imi7='Unknown immigration status',
                INCDHH='Household income',
                EHG2DVR32='High school education',
                EHG2DVR33='Post-secondary education',
@@ -72,42 +86,97 @@ mod4t$X<-recode(mod4t$X, `(Intercept)`='Intercept',
                area_m='Postal code area')
 
 
+
+unique(mod4t$X)
+mod4t
+#008080,#70a494,#b4c8a8,#f6edbd,#edbb8a,#de8a5a,#ca562c
+
+labels <- c("none" = "darkgrey",
+            "Health" = "#ca562c",
+            "Socio-demographic" = "#481a6c",
+            "Biodiversity" = "#008080")
+
+library(glue)
+library(ggtext)
+
 mod4t <- mod4t %>% filter(X != "Immigrant (White, <10 years)")
 
+mod4t$variable <- mod4t$X
+            
+mod4t$variable <- recode(mod4t$variable, 
+                 "Intercept" = "none",
+                 "Weekly activity time" = "Health",
+                 "Has not quit smoking" ="Health",                 
+                 "Unknown smoking cessation status" = "Health",
+                 "Never smoked" = "Health",
+                 "Occasional smoker" = "Health",
+                 "Unknown smoking frequency" = "Health",
+                 "Weekly alcohol consumption" = "Health",
+                 "Daily fruit and vegetable consumption" = "Health",
+                 "Common-law" = "Socio-demographic" ,
+                 "Never Married" = "Socio-demographic",
+                 "Separated" = "Socio-demographic",
+                 "Divorced" = "Socio-demographic",
+                 "Widowed" = "Socio-demographic",
+                 "Unknown marital status" = "Socio-demographic",
+                 "Employed" = "Socio-demographic",
+                 "Unknown employment status" = "Socio-demographic",           
+                 "White" = "Socio-demographic",
+                 "Unknown ethnicity" = "Socio-demographic",
+                 "Non-immigrant (non-white)" = "Socio-demographic",            
+                 "Unknown immigration status" = "Socio-demographic",
+                 "Household income" = "Socio-demographic",
+                 "High school education" = "Socio-demographic",                
+                 "Post-secondary education" = "Socio-demographic",
+                 "Unknown Education status" = "Socio-demographic",
+                 "Female" = "Socio-demographic",                               
+                 "Age" = "Socio-demographic",
+                 "Tree species richness" = "Biodiversity",
+                 "Distance to nearest ebird hotspot" = "Biodiversity",    
+                 "Modeled bird Shannon diversity" = "Biodiversity",
+                 "Greenness within 500m buffer (NDVI)" = "Biodiversity",
+                 "Year" = "none",                                
+                 "Distance to blue space" = "Biodiversity",
+                 "Distance to green space" = "Biodiversity",
+                 "Proportion of blue space" = "Biodiversity",             
+                 "Proportion of green space" = "Biodiversity",
+                 "Postal code area" = "Socio-demographic",
+                 "Non-smoker" = "Health")
 
 or_MH_plot <- ggplot(data=mod4t, 
-       aes(x=Estimate, y=reorder(X, Estimate), 
-           xmin=Estimate-Std..Error,
-           xmax=Estimate+Std..Error,
-           colour=Pr...z..<0.05,
-           shape=Pr...z..<0.05))+
-            geom_errorbar(lwd = 1)+
-            geom_point(size = 3)+
-            scale_x_continuous(limits=c(-2,2), 
-                   breaks=c(log(0.01),
-                            log(0.1),log(0.2), 
-                            log(0.5),0,log(2),log(5), 
-                            log(10),log(100)),
-                   labels=c(0.01,0.1,0.2,0.5,1,2,5,10,100))+
-            theme_light()+
-            geom_vline(xintercept=0, colour='#004777', 
-                       linetype='dashed',
-                       lwd = 1,
-                       alpha = 0.45)+
-            scale_colour_manual(values = c("#050401", "#00AFB5"))+
-            xlab('Odds ratio for poor mental health')+
-            ylab(NULL)+
-            geom_hline(yintercept=1, colour='lightgrey')+
-            theme(axis.title=element_text(size=12),
-                  axis.text=element_text(size=12),
-                  legend.position = "none",
-                  legend.key.size = unit(1, 'cm'), 
-                  legend.key.height = unit(1, 'cm'),
-                  legend.key.width = unit(1, 'cm')) +
-            guides(colour = guide_legend(title = "P < 0.05"),
-                   shape = guide_legend(title = "P < 0.05"))
+                   aes(x=Estimate, y=reorder(X, Estimate),
+                       xmin=Estimate-Std..Error,
+                       xmax=Estimate+Std..Error,
+                       fill=Pr...z..<0.05,
+                       shape=Pr...z..<0.05,
+                       colour = variable))+
+                        geom_errorbar(lwd = 1)+
+                        geom_point(size = 3, stroke = 1.5)+
+                        scale_x_continuous(limits=c(-2,2), 
+                               breaks=c(log(0.01),
+                                        log(0.1),log(0.2), 
+                                        log(0.5),0,log(2),log(5), 
+                                        log(10),log(100)),
+                               labels=c(0.01,0.1,0.2,0.5,1,2,5,10,100))+
+                        theme_light()+
+                        geom_vline(xintercept=0, colour='#004777', 
+                                   linetype='dashed',
+                                   lwd = 1,
+                                   alpha = 0.45)+
+                        scale_fill_manual(values = c("lightgrey", "black"))+
+                        scale_shape_manual(values = c(23,22)) +
+                        scale_colour_manual(values = labels) +
+                        xlab('Odds ratio for poor mental health')+
+                        ylab(NULL)+
+                        geom_hline(yintercept=1, colour='lightgrey')+
+                        theme(axis.title=element_text(size=14),
+                              axis.text=element_text(size=14)) +
+                        guides(fill = guide_legend(title = "P < 0.05"),
+                               shape = guide_legend(title = "P < 0.05"))
 
-or_MH_plot
+
+or_MH_plot + theme(axis.text.y = 
+                               element_text(colour = labels))
 
 
 library(viridis)
@@ -246,7 +315,7 @@ library(patchwork)
 
 odds_ratio_plot <- or_MH_plot + or_stress_plot + plot_annotation(tag_levels = c("A"))
             
-ggsave("output/MH_stress_OR_plot.jpg")
+ggsave("output/MH_stress_OR_plot.tiff")
 
 library(viridis)
 mods$X[which(mods$X=="Modeled bird Shannon diversity")]<-"Modeled bird species richness"
