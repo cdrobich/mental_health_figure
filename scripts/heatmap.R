@@ -359,6 +359,7 @@ mods_high$group <- recode(mods_high$group,
                          "Female" = "Socio-demographic",                               
                          "Age" = "Socio-demographic",
                          "Tree species richness" = "Biodiversity",
+                         "Tree Shannon diversity" = "Biodiversity",
                          "Distance to nearest ebird hotspot" = "Biodiversity",    
                          "Modeled bird Shannon diversity" = "Biodiversity",
                          "Greenness within 500m buffer (NDVI)" = "Biodiversity",
@@ -396,8 +397,9 @@ high_heatmap <- mods_high_bd %>%
             theme(plot.title = element_text(hjust = 0.5,
                                             size = 14),
                   axis.text.x = element_text(size = 10),
-                  axis.text.y = element_blank(),
-                  axis.ticks.y = element_blank())+
+                  # axis.text.y = element_blank(),
+                  # axis.ticks.y = element_blank(),
+                  legend.position = "none")+
             xlab(" ") +
             ylab(" ") +
             scale_color_manual(values = c("lightgrey", "black")) +
@@ -405,8 +407,15 @@ high_heatmap <- mods_high_bd %>%
 
 
 
+library(ggpubr)
+
+
+leg <- get_legend(high_heatmap)
+leg_plot <- as_ggplot(leg)
+
 library(patchwork)
 
-heatmap <- both_heatmap + low_heatmap + high_heatmap
+heatmap <- both_heatmap + low_heatmap + 
+            high_heatmap + leg_plot + plot_layout(ncol = 4)
 
 ggsave("output/heatmap.jpg", heatmap)

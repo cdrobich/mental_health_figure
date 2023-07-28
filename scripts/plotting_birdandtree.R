@@ -27,7 +27,7 @@ mod3t<-read.csv('data/model_selection_tables/adj_mod3_mh_both_ptable_linear.csv'
 mod3t$mod='3'
 
 library(dplyr)
-
+library(ggforce) # rectangles
 library(ggplot2)
 
 modst<-bind_rows(mod1t,mod2t,mod3t,mod4t)
@@ -148,10 +148,9 @@ or_MH_plot <- ggplot(data=mod4t,
                        xmin=Estimate-Std..Error,
                        xmax=Estimate+Std..Error,
                        fill=Pr...z..<0.05,
-                       shape=Pr...z..<0.05,
                        colour = variable))+
                         geom_errorbar(lwd = 1)+
-                        geom_point(size = 3, stroke = 1.5)+
+                        geom_point(size = 3, stroke = 1.5, shape = 21)+
                         scale_x_continuous(limits=c(-2,2), 
                                breaks=c(log(0.01),
                                         log(0.1),log(0.2), 
@@ -164,7 +163,6 @@ or_MH_plot <- ggplot(data=mod4t,
                                    lwd = 1,
                                    alpha = 0.45)+
                         scale_fill_manual(values = c("#003052", "lightgrey"))+
-                        scale_shape_manual(values = c(22,23)) +
                         scale_colour_manual(values = labels) +
                         xlab('Odds ratio')+
             ggtitle("Poor mental health")+
@@ -172,92 +170,147 @@ or_MH_plot <- ggplot(data=mod4t,
                         geom_hline(yintercept=1, colour='lightgrey')+
                         theme(axis.title=element_text(size=12),
                               axis.text=element_text(size=12),
-                              legend.position = "none") 
-                        # guides(fill = guide_legend(title = "P < 0.05"),
-                        #        shape = guide_legend(title = "P < 0.05"),
-                        #        colour = guide_legend(title = "Category"))
+                              legend.position = "bottom") +
+                        guides(fill = guide_legend(title = "P < 0.05"),
+                              shape = guide_legend(title = "P < 0.05"),
+                                colour = guide_legend(title = "Category")) +
+             annotate("rect", xmin = -0.25, xmax = 0.25,
+                      ymin = 12.5, ymax = 25.5,
+                      alpha = 0.3,
+                      fill = "lightblue")
+            
 
 ggsave("output/MH_oddsratio.jpg")
 
-library(viridis)
-bird<-subset(mods, X=="Modeled bird Shannon diversity")
-ggplot(data=bird, 
-       aes(y=Estimate, x=mod, ymin=Estimate-Std..Error,
-           ymax=Estimate+Std..Error,
-           colour=mod))+
-            geom_errorbar()+
-            theme_classic()+
-            geom_hline(yintercept=0, colour='darkred', linetype='dashed')+
-            scale_colour_viridis_d()+
-            ylab('Odds ratio for poor mental health')+
-            xlab('Model adjustment phase')+
-            theme(legend.position = 'none')+
-            scale_y_continuous(limits=c(-0.12,0.0001),
-                               breaks=c(log(0.9),log(0.92),log(0.94),
-                                        log(0.96),log(0.98),0),
-                               labels=c(0.9,0.92,0.94,0.96,0.98,1))+
-            ggtitle("Modeled bird Shannon diversity")+
-            geom_point()+
-            theme(axis.title=element_text(size=16),
-                  axis.text=element_text(size=14),
-                  title=element_text(size=16))
+biodiversity <- mod4t %>% 
+            filter(variable == "Biodiversity") %>% 
+            ggplot(aes(x=Estimate, y=reorder(X, Estimate),
+                         xmin=Estimate-Std..Error,
+                         xmax=Estimate+Std..Error,
+                         fill=Pr...z..<0.05,
+                         colour = variable))+
+            geom_errorbar(lwd = 1)+
+            geom_point(size = 3, stroke = 1.5, shape = 21)+
+            scale_x_continuous(limits=c(-0.5,0.5))+
+                               # breaks=c(log(0.01),
+                               #          log(0.1),log(0.2),
+                               #          log(0.5),0,log(2),log(5),
+                               #          log(10),log(100)),
+                               # labels=c(0.01,0.1,0.2,0.5,1,2,5,10,100))+
+            theme_light()+
+            geom_vline(xintercept=0, colour='black', 
+                       linetype='dashed',
+                       lwd = 1,
+                       alpha = 0.45)+
+            scale_fill_manual(values = c("#003052", "lightgrey"))+
+            scale_shape_manual(values = c(22,23)) +
+            scale_colour_manual(values = labels) +
+            xlab('Odds ratio')+
+            ggtitle("Poor mental health")+
+            ylab(NULL)+
+            geom_hline(yintercept=1, colour='lightgrey')+
+            theme(axis.title=element_text(size=12),
+                  axis.text=element_text(size=12)) +
+            guides(fill = guide_legend(title = "P < 0.05"),
+                   shape = guide_legend(title = "P < 0.05"),
+                   colour = guide_legend(title = "Category"))
 
-ggsave('adjustment_mh_both_birds.pdf')
 
-tree<-subset(mods, X=="Tree species richness")
-ggplot(data=tree,
-       aes(y=Estimate, x=mod,
-           ymin=Estimate-Std..Error,
-           ymax=Estimate+Std..Error,
-           colour=mod))+geom_errorbar()+
-            theme_classic()+
-            geom_hline(yintercept=0, colour='darkred', linetype='dashed')+
-            scale_colour_viridis_d()+
-            ylab('Odds ratio for poor mental health')+
-            xlab('Model adjustment phase')+
-            theme(legend.position = 'none')+
-            scale_y_continuous(limits=c(-0.18,0.0001), 
-                               breaks=c(log(0.8),log(0.85),
-                                        log(0.90), log(0.95),0),
-                               labels=c(0.8, 0.85,0.9,0.95,1))+
-            ggtitle("Tree species richness")+
-            geom_point()+
-            theme(axis.title=element_text(size=16),
-                  axis.text=element_text(size=14),
-                  title=element_text(size=16))
+ggsave("output/MH_biodiversity_oddsratio.jpg")
 
 
 
-ggsave('adjustment_mh_both_trees.pdf')
+sig_plot <- mod4t %>% 
+            filter(Pr...z.. < 0.05) %>% 
+            ggplot(aes(x=Estimate, y=reorder(X, Estimate),
+                       xmin=Estimate-Std..Error,
+                       xmax=Estimate+Std..Error,
+                       fill = variable,
+                       colour = variable))+
+            geom_errorbar(lwd = 1)+
+            geom_point(size = 3, stroke = 1.5, shape = 21,
+                       colour = "black")+
+            #scale_x_continuous(limits=c(-0.5,0.5))+
+            # breaks=c(log(0.01),
+            #          log(0.1),log(0.2),
+            #          log(0.5),0,log(2),log(5),
+            #          log(10),log(100)),
+            # labels=c(0.01,0.1,0.2,0.5,1,2,5,10,100))+
+            theme_light()+
+            geom_vline(xintercept=0, colour='black', 
+                       linetype='dashed',
+                       lwd = 1,
+                       alpha = 0.45)+
+            scale_fill_manual(values = labels)+
+            scale_colour_manual(values = labels) +
+            xlab('Odds ratio')+
+            ggtitle("Poor mental health")+
+            ylab(NULL)+
+            geom_hline(yintercept=1, colour='lightgrey')+
+            theme(axis.title=element_text(size=12),
+                  axis.text=element_text(size=12)) +
+            guides(colour = guide_legend(title = "Category"),
+                   fill = guide_legend(title = "Category"))
 
 
-blue<-subset(mods, X=="Distance to blue space")
-ggplot(data=blue, 
-       aes(y=Estimate, x=mod, ymin=Estimate-Std..Error,
-           ymax=Estimate+Std..Error, colour=mod))+
-            geom_errorbar()+
-            theme_classic()+
-            geom_hline(yintercept=0, 
-                       colour='darkred', 
-                       linetype='dashed')+
-            scale_colour_viridis_d()+
-            ylab('Odds ratio for poor mental health')+
-            xlab('Model adjustment phase')+
-            theme(legend.position = 'none')+
-            scale_y_continuous(limits=c(-0.01,0.15), 
-                               breaks=c(0, log(1.05), 
-                                        log(1.1), log(1.15),
-                                        log(1.2)),
-                               labels=c(1,1.05, 1.10, 1.15, 1.2))+
-            ggtitle("Distance to blue space")+
-            geom_point()+
-            theme(axis.title=element_text(size=16),
-                  axis.text=element_text(size=14),
-                  title=element_text(size=16))
+ggsave("output/MH_sigp_oddsratio.jpg")
 
-ggsave('adjustment_mh_both_dblue.pdf')
 
-########## Self-reported Stress
+mod4t %>% filter(variable == "Biodiversity")
+
+list <- c("Tree species richness", "Distance to nearest ebird hotspot", "Modeled bird Shannon diversity",
+          "Greenness within 500m buffer (NDVI)", "Distance to blue space", "Distance to green space",
+          "Proportion of blue space", "Proportion of green space", "Postal code area", "Weekly alcohol consumption",
+          "Weekly activity time", "Unknown immigration status", "Daily fruit and vegetable consumption")
+
+
+limit <- mod4t %>% filter(X %in% list) %>% 
+            ggplot(aes(x=Estimate, y=reorder(X, Estimate),
+                       xmin=Estimate-Std..Error,
+                       xmax=Estimate+Std..Error,
+                       fill=Pr...z..<0.05,
+                       colour = variable))+
+            geom_errorbar(lwd = 1)+
+            geom_point(size = 2, stroke = 1.5, shape = 21)+
+            #scale_x_continuous(limits=c(-0.5,0.5))+
+            # breaks=c(log(0.01),
+            #          log(0.1),log(0.2),
+            #          log(0.5),0,log(2),log(5),
+            #          log(10),log(100)),
+            # labels=c(0.01,0.1,0.2,0.5,1,2,5,10,100))+
+            theme_light()+
+            geom_vline(xintercept=0, colour='black', 
+                       linetype='dashed',
+                       lwd = 1,
+                       alpha = 0.45)+
+            scale_fill_manual(values = c("#003052", "lightgrey")) +
+            scale_colour_manual(values = labels) +
+            xlab('Odds ratio')+
+            #ggtitle("Poor mental health")+
+            ylab(NULL)+
+            geom_hline(yintercept=1, colour='lightgrey')+
+            theme(axis.title=element_text(size=10),
+                  axis.text=element_text(size=10),
+                  legend.position = "none") +
+            guides(colour = guide_legend(title = "Category"),
+                   fill = guide_legend(title = "Category")) +
+            theme(plot.background = element_rect(colour = "black", 
+                                                 size=1))
+
+library(patchwork)
+
+or_MH_plot + inset_element(limit,
+                           left = 0.53,
+                           bottom = 0.05,
+                           right = 0.99,
+                           top = 0.5) +
+            plot_annotation(tag_levels = c("A"))
+            
+
+
+
+
+ ########## Self-reported Stress #########
 
 mod4i<-read.csv('data/model_selection_tables/adj_mod4_stress_both_ptable_mice_linear.csv')
 mod4i$mod='4'
@@ -358,90 +411,9 @@ or_stress_plot <- ggplot(data=mod4i,
 ggsave("output/OR_stress.jpg")
    
 
-library(patchwork)
+
 
 odds_ratio_plot <- or_MH_plot + or_stress_plot + 
             plot_annotation(tag_levels = c("A"))
             
 ggsave("output/MH_stress_OR_plot.tiff")
-
-library(viridis)
-mods$X[which(mods$X=="Modeled bird Shannon diversity")]<-"Modeled bird species richness"
-bird<-subset(mods, X=="Modeled bird species richness")
-ggplot(data=bird, aes(y=Estimate, x=mod, 
-                      ymin=Estimate-Std..Error, 
-                      ymax=Estimate+Std..Error, colour=mod))+
-            geom_errorbar()+
-            theme_classic()+
-            geom_hline(yintercept=0, colour='darkred',
-                       linetype='dashed')+
-            scale_colour_viridis_d()+
-            ylab('Odds ratio for high perceived life stress')+
-            xlab('Model adjustment phase')+
-            theme(legend.position = 'none')+
-            scale_y_continuous(limits=c(-0.04,0.015), 
-                               breaks=c(log(0.96),log(0.97),
-                                        log(0.98),log(0.99),0, 
-                                        log(1.01), log(1.02)),
-                               labels=c(0.96,0.97,0.98,0.99,1, 1.01,1.02))+
-            ggtitle("Modeled bird species richness")+
-            geom_point()+
-            theme(axis.title=element_text(size=16), 
-                  axis.text=element_text(size=14),
-                  title=element_text(size=16))
-
-
-
-#ggsave('adjustment_stress_both_birds.pdf')
-
-tree<-subset(mods, X=="Tree Shannon diversity")
-ggplot(data=tree,
-       aes(y=Estimate, x=mod, 
-           ymin=Estimate-Std..Error, ymax=Estimate+Std..Error, colour=mod))+
-            geom_errorbar()+
-            theme_classic()+
-            geom_hline(yintercept=0, colour='darkred',
-                       linetype='dashed')+
-            scale_colour_viridis_d()+
-            ylab('Odds ratio for high perceived life stress')+
-            xlab('Model adjustment phase')+
-            theme(legend.position = 'none')+
-            scale_y_continuous(limits=c(-0.01,0.03), 
-                               breaks=c(log(0.99),0, 
-                                        log(1.01), log(1.02), log(1.03)),
-                               labels=c(0.99,1,1.01,1.02,1.03))+
-            ggtitle("Tree Shannon diversity")+
-            geom_point()+
-            theme(axis.title=element_text(size=16), 
-                  axis.text=element_text(size=14),
-                  title=element_text(size=16))
-
-#ggsave('adjustment_stress_both_trees.pdf')
-
-
-green<-subset(mods, X=="Greenness in postalcode (NDVI)")
-
-ggplot(data=green,
-       aes(y=Estimate, 
-           x=mod, ymin=Estimate-Std..Error, 
-           ymax=Estimate+Std..Error, colour=mod))+
-            geom_errorbar()+
-            theme_classic()+
-            geom_hline(yintercept=0, colour='darkred', 
-                       linetype='dashed')+
-            scale_colour_viridis_d()+
-            ylab('Odds ratio for high perceived life stress')+
-            xlab('Model adjustment phase')+theme(legend.position = 'none')+
-            scale_y_continuous(limits=c(-0.01,0.135), 
-                               breaks=c(0, log(1.05), log(1.1), 
-                                        log(1.15), log(1.2)),
-                               labels=c(1,1.05,1.10,1.15,1.2))+
-            ggtitle("Greenness in postalcode (NDVI)")+
-            geom_point()+
-            theme(axis.title=element_text(size=16), 
-                  axis.text=element_text(size=14),
-                  title=element_text(size=16))
-
-#ggsave('adjustment_stress_both_green.pdf')
-
-                                                                
