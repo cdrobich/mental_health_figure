@@ -299,14 +299,14 @@ limit <- mod4t %>% filter(X %in% list) %>%
 
 library(patchwork)
 
-or_MH_plot + inset_element(limit,
+plot2 <- or_MH_plot + inset_element(limit,
                            left = 0.53,
                            bottom = 0.05,
                            right = 0.99,
                            top = 0.5) +
             plot_annotation(tag_levels = c("A"))
             
-
+ggsave('output/mentalhealth_plots_inset.jpg')
 
 
 
