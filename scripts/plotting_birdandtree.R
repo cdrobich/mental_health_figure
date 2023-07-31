@@ -177,7 +177,7 @@ or_MH_plot <- ggplot(data=mod4t,
              annotate("rect", xmin = -0.25, xmax = 0.25,
                       ymin = 12.5, ymax = 25.5,
                       alpha = 0.3,
-                      fill = "lightblue")
+                      fill = "lightgreen")
             
 
 ggsave("output/MH_oddsratio.jpg")
@@ -308,7 +308,7 @@ plot2 <- or_MH_plot + inset_element(limit,
             
 ggsave('output/mentalhealth_plots_inset.jpg')
 
-
+ggsave('output/mentalhealth_plots_inset.pdf')
 
  ########## Self-reported Stress #########
 
