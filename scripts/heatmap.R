@@ -1,6 +1,9 @@
 library(tidyverse)
 library(viridis)
 
+library(stringr)                   # Load stringr
+
+
 ####### examples ########
 # Dummy data
 x <- LETTERS[1:20]
@@ -11,7 +14,6 @@ data$Z <- runif(400, 0, 5)
 # Heatmap 
 ggplot(data, aes(X, Y, fill= Z)) + 
             geom_tile()
-
 
 
 
@@ -77,9 +79,6 @@ ggplot(ggplot(data=melted_cormat[melted_cormat$value != 1 &
             theme(axis.text.x=element_text(angle=90, vjust=0.5, 
                                            size=10, hjust=1))+
             coord_fixed()
-
-
-
 
 
 
@@ -172,7 +171,7 @@ mods_together$group <- recode(mods_together$group,
 
 
 mods_together <- rename(mods_together,
-                 vvariable = X,
+                 variable = X,
                  P = Pr...z..,
                  std.error = Std..Error)
 
@@ -180,6 +179,7 @@ write.csv(mod4_biodiversity,"data/adj_mod134_mh_both_ptable_mice_linear_heatmap.
 
 
 ####### Both data figures #######
+mods_together  <- mods_together  %>% filter(variable != "Immigrant (White, <10 years)")
 
 mods_together_bd <- mods_together %>% 
             filter(group == "Biodiversity")
@@ -187,8 +187,15 @@ mods_together_bd <- mods_together %>%
 mods_both_sig <- mods_together_bd %>% 
             filter(P < 0.05)
 
+unique(mods_together_bd$mod)
+
+
+mods_together_bd$mod <- factor(mods_together_bd$mod, levels = c('Biodiversity',
+                                                                'Health',
+                                                                'Socio-demographic'))
+
 both_heatmap <- mods_together_bd %>% 
-            ggplot(aes(mod, variable, fill = Estimate)) +
+            ggplot(aes(mod,variable, fill = Estimate)) +
             geom_tile() +
             geom_text(aes(label = round(Estimate, 2),
                           colour = P < 0.05),
@@ -197,26 +204,26 @@ both_heatmap <- mods_together_bd %>%
             scale_fill_gradient2(low = "#fde725", mid = "white",high = "#045275") +
             theme_void() +
             theme(axis.text=element_text(size=10),
-                    axis.title=element_text(size=10),
+                  axis.title=element_text(size=10),
                   plot.title = element_text(hjust = 0.5,
                                             size = 14),
+                  axis.text.y = element_text(hjust = 0.99),
                   legend.position = "none")+
             xlab(" ") +
             ylab(" ") +
-            scale_color_manual(values = c("lightgrey", "black")) +
+            scale_color_manual(values = c("lightgrey","black")) +
             ggtitle("All data")
-
 
 
 ####### Low Data #########
 
-mod4_low<-read.csv('data/model_selection_tables/adj_mod4_mh_low_ptable_mice_linear.csv')
+mod4_low<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_high_ptable_linear.csv')
 mod4_low$mod='Health'
 
-mod1_low<-read.csv('data/model_selection_tables/adj_mod1_mh_low_ptable_linear.csv')
+mod1_low<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_high_ptable_linear.csv')
 mod1_low$mod='Biodiversity'
 
-mod3_low<-read.csv('data/model_selection_tables/adj_mod3_mh_low_ptable_linear.csv')
+mod3_low<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_high_ptable_linear.csv')
 mod3_low$mod='Socio-demographic'
 
 
@@ -226,7 +233,8 @@ str(mods_low)
 
 mods_low$X <- recode(mods_low$X, `(Intercept)`='Intercept',eexp="Weekly activity time",SMKC_102='Has not quit smoking',SMKC_103='Unknown smoking cessation status',SMKC_106='Never smoked', SMKC_2022='Occasional smoker',SMKC_2023='Non-smoker', SMKC_2024='Unknown smoking frequency', ALCEDWKY='Weekly alcohol consumption',
                           FVCDVTOT='Daily fruit and vegetable consumption', married2='Common-law', married3='Never Married', married4='Separated',married5='Divorced',married6='Widowed', married7='Unknown marital status', job1='Employed',job2='Unknown employment status', white1='White', white2='Unknown ethnicity',imi2='Non-immigrant (non-white)', 
-                          imi3='Immigrant (White, <10 years)',imi7='Unknown immigration status', INCDHH='Household income', EHG2DVR32='High school education', EHG2DVR33='Post-secondary education',EHG2DVR34='Unknown Education status',DHHE_SEX2='Female',DHH_AGE='Age', treerich='Tree species richness', treediv='Tree Shannon diversity', DistancetoLocation='Distance to nearest ebird hotspot', ModeledSDiv='Modeled bird Shannon diversity', ModeledSRich='Modeled bird species richness', dist_ChaoEstimatedSpRich='Chao-estimated bird species richness',dist_ChaoEstimatedSpDiv='Chao-estimated bird Shannon diversity', ndvi='Greenness in postalcode (NDVI)',ndvi500='Greenness within 500m buffer (NDVI)', ndvi1000='Greenness within 1000m buffer (NDVI)',YEAR='Year',bluedist='Distance to blue space',
+                          imi3='Immigrant (White, <10 years)',imi7='Unknown immigration status', INCDHH='Household income', EHG2DVR32='High school education', EHG2DVR33='Post-secondary education',EHG2DVR34='Unknown Education status',DHHE_SEX2='Female',DHH_AGE='Age', treerich='Tree species richness', treediv='Tree Shannon diversity', 
+                     DistancetoLocation='Distance to nearest ebird hotspot', ModeledSDiv='Modeled bird Shannon diversity', ModeledSRich='Modeled bird species richness', dist_ChaoEstimatedSpRich='Chao-estimated bird species richness',dist_ChaoEstimatedSpDiv='Chao-estimated bird Shannon diversity', ndvi='Greenness in postalcode (NDVI)',ndvi500='Greenness within 500m buffer (NDVI)', ndvi1000='Greenness within 1000m buffer (NDVI)',YEAR='Year',bluedist='Distance to blue space',
                           greendist='Distance to green space',PropBlue="Proportion of blue space", PropGreen='Proportion of green space', area_m='Postal code area')
 
 mods_low$group <- mods_low$X
@@ -277,10 +285,18 @@ mods_low <- rename(mods_low,
                         P = Pr...z..,
                         std.error = Std..Error)
 
-# Biodiversity subset
+# Biodiversity subset ####
+mods_low  <- mods_low %>% filter(variable != "Immigrant (White, <10 years)")
 
 mods_low_bd <- mods_low %>% 
             filter(group == "Biodiversity")
+
+mods_low_bd$mod <- factor(mods_low_bd$mod, levels = c('Biodiversity',
+                                                                'Health',
+                                                                'Socio-demographic'))
+
+
+
 
 mods_low_sig <- mods_low_bd %>% 
             filter(P < 0.05)
@@ -292,6 +308,7 @@ low_heatmap <- mods_low_bd %>%
                           colour = P < 0.05),
                       size = 5) +
             scale_x_discrete(position = "top") +
+            #scale_x_discrete(position = "top") +
             scale_fill_gradient2(low = "#fde725", mid = "white",high = "#045275") +
             theme_void() +
             theme(plot.title = element_text(hjust = 0.5,
@@ -306,16 +323,15 @@ low_heatmap <- mods_low_bd %>%
             ggtitle("Low marginalization")
 
 
-
 ####### High Data #########
 
-mod4_high<-read.csv('data/model_selection_tables/adj_mod4_mh_high_ptable_mice_linear.csv')
+mod4_high<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_low_ptable_linear.csv')
 mod4_high$mod='Health'
 
-mod1_high<-read.csv('data/model_selection_tables/adj_mod1_mh_high_ptable_linear.csv')
+mod1_high<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_low_ptable_linear.csv')
 mod1_high$mod='Biodiversity'
 
-mod3_high<-read.csv('data/model_selection_tables/adj_mod3_mh_high_ptable_linear.csv')
+mod3_high<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_low_ptable_linear.csv')
 mod3_high$mod='Socio-demographic'
 
 
@@ -382,6 +398,14 @@ mods_high<- rename(mods_high,
 mods_high_bd <- mods_high %>% 
             filter(group == "Biodiversity")
 
+
+
+mods_high_bd$mod <- factor(mods_high_bd$mod, levels = c('Biodiversity',
+                                                      'Health',
+                                                      'Socio-demographic'))
+
+
+
 mods_high_sig <- mods_high_bd %>% 
             filter(P < 0.05)
 
@@ -406,16 +430,23 @@ high_heatmap <- mods_high_bd %>%
             ggtitle("High marginalization")
 
 
+# order of models 'biodiversity, socio, health'
+# change label to be greyed out p <0.05
+#left labels be right aligned
 
+########### panel ######
 library(ggpubr)
 
-
-leg <- get_legend(high_heatmap)
+leg <- get_legend(both_heatmap)
 leg_plot <- as_ggplot(leg)
 
 library(patchwork)
 
+layout <- "
+AAABBBCCCD
+"
+
 heatmap <- both_heatmap + low_heatmap + 
-            high_heatmap + leg_plot + plot_layout(ncol = 4)
+            high_heatmap + leg_plot + plot_layout(design = layout)
 
 ggsave("output/heatmap.jpg", heatmap)
