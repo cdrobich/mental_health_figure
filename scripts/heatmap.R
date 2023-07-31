@@ -450,3 +450,5 @@ heatmap <- both_heatmap + low_heatmap +
             high_heatmap + leg_plot + plot_layout(design = layout)
 
 ggsave("output/heatmap.jpg", heatmap)
+
+ggsave("output/heatmap.pdf", heatmap)
