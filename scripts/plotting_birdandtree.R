@@ -307,6 +307,7 @@ plot2 <- or_MH_plot + inset_element(limit,
             plot_annotation(tag_levels = c("A"))
             
 ggsave('output/mentalhealth_plots_inset.jpg')
+ggsave('output/mentalhealth_plots_inset.eps')
 
 ggsave('output/mentalhealth_plots_inset.pdf')
 

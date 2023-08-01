@@ -191,8 +191,8 @@ unique(mods_together_bd$mod)
 
 
 mods_together_bd$mod <- factor(mods_together_bd$mod, levels = c('Biodiversity',
-                                                                'Health',
-                                                                'Socio-demographic'))
+                                                                'Socio-demographic',
+                                                                'Health'))
 
 both_heatmap <- mods_together_bd %>% 
             ggplot(aes(mod,variable, fill = Estimate)) +
@@ -217,13 +217,13 @@ both_heatmap <- mods_together_bd %>%
 
 ####### Low Data #########
 
-mod4_low<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_high_ptable_linear.csv')
+mod4_low<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_low_ptable_linear.csv')
 mod4_low$mod='Health'
 
-mod1_low<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_high_ptable_linear.csv')
+mod1_low<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_low_ptable_linear.csv')
 mod1_low$mod='Biodiversity'
 
-mod3_low<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_high_ptable_linear.csv')
+mod3_low<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_low_ptable_linear.csv')
 mod3_low$mod='Socio-demographic'
 
 
@@ -291,9 +291,9 @@ mods_low  <- mods_low %>% filter(variable != "Immigrant (White, <10 years)")
 mods_low_bd <- mods_low %>% 
             filter(group == "Biodiversity")
 
-mods_low_bd$mod <- factor(mods_low_bd$mod, levels = c('Biodiversity',
-                                                                'Health',
-                                                                'Socio-demographic'))
+mods_low_bd$mod <- factor(mods_low_bd$mod, levels = c('Biodiversity','Socio-demographic',
+                                                                'Health'
+                                                                ))
 
 
 
@@ -325,13 +325,13 @@ low_heatmap <- mods_low_bd %>%
 
 ####### High Data #########
 
-mod4_high<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_low_ptable_linear.csv')
+mod4_high<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_high_ptable_linear.csv')
 mod4_high$mod='Health'
 
-mod1_high<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_low_ptable_linear.csv')
+mod1_high<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_high_ptable_linear.csv')
 mod1_high$mod='Biodiversity'
 
-mod3_high<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_low_ptable_linear.csv')
+mod3_high<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_high_ptable_linear.csv')
 mod3_high$mod='Socio-demographic'
 
 
@@ -401,8 +401,9 @@ mods_high_bd <- mods_high %>%
 
 
 mods_high_bd$mod <- factor(mods_high_bd$mod, levels = c('Biodiversity',
-                                                      'Health',
-                                                      'Socio-demographic'))
+                                                        'Socio-demographic',
+                                                      'Health'
+                                                      ))
 
 
 
@@ -452,3 +453,5 @@ heatmap <- both_heatmap + low_heatmap +
 ggsave("output/heatmap.jpg", heatmap)
 
 ggsave("output/heatmap.pdf", heatmap)
+
+ggsave("output/heatmap.eps", heatmap)
