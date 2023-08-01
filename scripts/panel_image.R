@@ -764,7 +764,8 @@ high_bird_plot_fw <- ggplot(high_bird, aes(x=x, y=probability, ymin=SEmin, ymax=
             xlab("Scaled Bird Diversity") +
             theme_light()+
             theme(axis.title=element_text(size=10),
-                  axis.text=element_text(size=10)) + 
+                  axis.text=element_text(size=10),
+                  legend.position = "none") + 
             scale_fill_manual(values = colour_label) +
             scale_colour_manual(values = colour_line)
 
