@@ -14,42 +14,33 @@ mod3_socio<-read.csv('data/model_selection_tables/adj_mod3_mh_both_ptable_linear
 mod3_socio$mod='Socio-demographic'
 mod3_socio$data='both'
 
-######### low marginalization ##########
-mod4_low<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_high_ptable_linear.csv')
-mod4_low$mod='Health'
-mod4_low$data='low'
-
-mod1_low<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_high_ptable_linear.csv')
-mod1_low$mod='Biodiversity'
-mod1_low$data='low'
-
-mod3_low<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_high_ptable_linear.csv')
-mod3_low$mod='Socio-demographic'
-mod3_low$data = "low"
-
-######## high marginalization ##########
-
-mod4_high<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_low_ptable_linear.csv')
+######### high marginalization ##########
+mod4_high<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_high_ptable_linear.csv')
 mod4_high$mod='Health'
-mod4_high$data='high'
+mod4_high$data='low'
 
-mod1_high<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_low_ptable_linear.csv')
+mod1_high<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_high_ptable_linear.csv')
 mod1_high$mod='Biodiversity'
-mod1_high$data = 'high'
+mod1_high$data='low'
 
-
-mod3_high<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_low_ptable_linear.csv')
+mod3_high<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_high_ptable_linear.csv')
 mod3_high$mod='Socio-demographic'
-mod3_high$data = 'high'
+mod3_high$data = "low"
+
+######## low marginalization ##########
+
+mod4_low<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_low_ptable_linear.csv')
+mod4_low$mod='Health'
+mod4_low$data='high'
+
+mod1_low<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_low_ptable_linear.csv')
+mod1_low$mod='Biodiversity'
+mod1_low$data = 'high'
 
 
-
-ggplot(data=data.frame( x=c(-1,2),y=c(-1,2) ), aes(x=x,y=y)) + 
-            geom_point(shape = 1) +
-            geom_abline(intercept = 1, slope = -1, col = "red") +
-            geom_hline(yintercept = 0) +
-            geom_vline(xintercept = 0)
-
+mod3_low<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_low_ptable_linear.csv')
+mod3_low$mod='Socio-demographic'
+mod3_low$data = 'high'
 
 ############# logit ##########
 
@@ -276,71 +267,6 @@ write.csv(low_tree, 'output/probability_low_data_tree.csv', row.names = FALSE)
 colnames(low_tree)
 
 
-# Model 4, tree species richness
-low_data_tree <- as.data.frame(logitify(mod4_low$Estimate[which(mod4_low$X=='(Intercept)')]
-                                         ,mod4_low$Estimate[which(mod4_low$X=='treerich')]))
-
-colnames(low_data_tree) <- c('probability_mod4')
-
-
-low_data_tree$SEmax_mod4 <- logitify(mod4_low$Estimate[which(mod4_low$X=='(Intercept)')]+
-                                                   mod4_low$Std..Error[which(mod4_low$X=='(Intercept)')]
-                                       ,mod4_low$Estimate[which(mod4_low$X=='treerich')] +
-                                                   mod4_low$Std..Error[which(mod4_low$X=='treerich')])
-
-low_data_tree$SEmin_mod4 <- logitify(mod4_low$Estimate[which(mod4_low$X=='(Intercept)')]-
-                                                  mod4_low$Std..Error[which(mod4_low$X=='(Intercept)')]
-                                      ,mod4_low$Estimate[which(mod4_low$X=='treerich')] -
-                                                  mod4_low$Std..Error[which(mod4_low$X=='treerich')])
-
-### Model 1, tree spp ###
-low_data_tree$probability_mod1 <- logitify(mod1_low$Estimate[which(mod1_low$X=='(Intercept)')]
-                                            ,mod1_low$Estimate[which(mod1_low$X=='treerich')])
-
-low_data_tree$SEmax_mod1 <- logitify(mod1_low$Estimate[which(mod1_low$X=='(Intercept)')]+
-                                                  mod1_low$Std..Error[which(mod1_low$X=='(Intercept)')]
-                                       ,mod1_low$Estimate[which(mod1_low$X=='treerich')] +
-                                                  mod1_low$Std..Error[which(mod1_low$X=='treerich')])
-
-low_data_tree$SEmin_mod1 <- logitify(mod1_low$Estimate[which(mod1_low$X=='(Intercept)')]-
-                                                  mod1_low$Std..Error[which(mod1_low$X=='(Intercept)')]
-                                      ,mod1_low$Estimate[which(mod1_low$X=='treerich')]-
-                                                  mod1_low$Std..Error[which(mod1_low$X=='treerich')])
-
-#### Model 3, tree spp
-low_data_tree$probability_mod3 <- logitify(mod3_low$Estimate[which(mod3_low$X=='(Intercept)')]
-                                            ,mod3_low$Estimate[which(mod3_low$X=='treerich')])
-
-low_data_tree$SEmax_mod3 <- logitify(mod3_low$Estimate[which(mod3_low$X=='(Intercept)')]+
-                                                  mod3_low$Std..Error[which(mod3_low$X=='(Intercept)')]
-                                       ,mod3_low$Estimate[which(mod3_low$X=='treerich')] +
-                                                  mod3_low$Std..Error[which(mod3_low$X=='treerich')])
-
-low_data_tree$SEmin_mod3 <- logitify(mod3_low$Estimate[which(mod3_low$X=='(Intercept)')]-
-                                                  mod3_low$Std..Error[which(mod3_low$X=='(Intercept)')]
-                                      ,mod3_low$Estimate[which(mod3_low$X=='treerich')]-
-                                                  mod3_low$Std..Error[which(mod3_low$X=='treerich')])
-
-low_data_tree$x <- x
-
-lowdata_tree <- low_data_tree %>% 
-            pivot_longer(
-                        cols = !x, 
-                        names_to = c("value","model"),
-                        names_sep = "_",
-                        values_to = "y"
-            )
-
-low_tree <- lowdata_tree %>% pivot_wider(names_from = value,
-                             values_from = y)
-
-
-write.csv(low_tree, 'output/probability_low_data_tree.csv', row.names = FALSE)
-
-colnames(low_tree)
-
-
-
 
 
 ########### Low marginalization, Bird species ############
@@ -500,6 +426,12 @@ high_data_bird$SEmin_mod4 <- logitify(mod4_high$Estimate[which(mod4_high$X=='(In
                                                   mod4_high$Std..Error[which(mod4_high$X=='(Intercept)')]
                                       ,mod4_high$Estimate[which(mod4_high$X=='ModeledSDiv')] -
                                                   mod4_high$Std..Error[which(mod4_high$X=='ModeledSDiv')])
+
+plot(logitify(mod4_high$Estimate[which(mod4_high$X=='(Intercept)')]
+              ,mod4_high$Estimate[which(mod4_high$X=='ModeledSDiv')]))
+
+
+
 
 ### Model 1, bird spp ###
 high_data_bird$probability_mod1 <- logitify(mod1_high$Estimate[which(mod1_high$X=='(Intercept)')]
