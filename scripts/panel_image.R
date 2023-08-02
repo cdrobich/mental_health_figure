@@ -15,7 +15,7 @@ mod3_socio$mod='Socio-demographic'
 mod3_socio$data='both'
 
 ######### high marginalization ##########
-mod4_high<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_high_ptable_linear.csv')
+mod4_high<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_high_ptable_mice_linear.csv')
 mod4_high$mod='Health'
 mod4_high$data='low'
 
@@ -29,7 +29,7 @@ mod3_high$data = "low"
 
 ######## low marginalization ##########
 
-mod4_low<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_low_ptable_linear.csv')
+mod4_low<-read.csv('data/model_selection_table_28Jul23/adj_mod4_mh_low_ptable_mice_linear.csv')
 mod4_low$mod='Health'
 mod4_low$data='high'
 
@@ -606,6 +606,7 @@ all_panel <- both_tree_plot + both_bird_plot +
 
 ggsave('output/all_panel_probabilities.jpg')
 ggsave('output/all_panel_probabilities.pdf')
+ggsave('output/all_panel_probabilities.eps', device=cairo_ps)
 
 
 ########## facet wraps ###########
@@ -709,6 +710,7 @@ panel_facetwrap <- both_tree_plot_fw + both_bird_plot_fw +
 
 ggsave('output/all_panel_probabilities_facetwrap.jpg')
 ggsave('output/all_panel_probabilities_facetwrap.pdf')
+ggsave('output/all_panel_probabilities_facetwrap.eps', device=cairo_ps)
 
 
 
