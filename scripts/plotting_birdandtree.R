@@ -279,7 +279,7 @@ limit <- mod4t %>% filter(X %in% list) %>%
             #          log(10),log(100)),
             # labels=c(0.01,0.1,0.2,0.5,1,2,5,10,100))+
             theme_light()+
-            geom_vline(xintercept=0, colour='black', 
+            geom_vline(xintercept=1, colour='black', 
                        linetype='dashed',
                        lwd = 1,
                        alpha = 0.45)+

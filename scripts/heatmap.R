@@ -115,7 +115,7 @@ mod1_bio<-read.csv('data/model_selection_tables/adj_mod1_mh_both_ptable_linear.c
 mod1_bio$mod='Biodiversity'
 
 mod3_socio<-read.csv('data/model_selection_tables/adj_mod3_mh_both_ptable_linear.csv')
-mod3_socio$mod='Socio-demographic'
+mod3_socio$mod='Socio-dem'
 
 
 mods_together <- as.data.frame(bind_rows(mod1_bio, mod3_socio, mod4_health))
@@ -139,24 +139,24 @@ mods_together$group <- recode(mods_together$group,
                          "Unknown smoking frequency" = "Health",
                          "Weekly alcohol consumption" = "Health",
                          "Daily fruit and vegetable consumption" = "Health",
-                         "Common-law" = "Socio-demographic" ,
-                         "Never Married" = "Socio-demographic",
-                         "Separated" = "Socio-demographic",
-                         "Divorced" = "Socio-demographic",
-                         "Widowed" = "Socio-demographic",
-                         "Unknown marital status" = "Socio-demographic",
-                         "Employed" = "Socio-demographic",
-                         "Unknown employment status" = "Socio-demographic",           
-                         "White" = "Socio-demographic",
-                         "Unknown ethnicity" = "Socio-demographic",
-                         "Non-immigrant (non-white)" = "Socio-demographic",            
-                         "Unknown immigration status" = "Socio-demographic",
-                         "Household income" = "Socio-demographic",
-                         "High school education" = "Socio-demographic",                
-                         "Post-secondary education" = "Socio-demographic",
-                         "Unknown Education status" = "Socio-demographic",
-                         "Female" = "Socio-demographic",                               
-                         "Age" = "Socio-demographic",
+                         "Common-law" = "Socio-dem" ,
+                         "Never Married" = "Socio-dem",
+                         "Separated" = "Socio-dem",
+                         "Divorced" = "Socio-dem",
+                         "Widowed" = "Socio-dem",
+                         "Unknown marital status" = "Socio-dem",
+                         "Employed" = "Socio-dem",
+                         "Unknown employment status" = "Socio-dem",           
+                         "White" = "Socio-dem",
+                         "Unknown ethnicity" = "Socio-dem",
+                         "Non-immigrant (non-white)" = "Socio-dem",            
+                         "Unknown immigration status" = "Socio-dem",
+                         "Household income" = "Socio-dem",
+                         "High school education" = "Socio-dem",                
+                         "Post-secondary education" = "Socio-dem",
+                         "Unknown Education status" = "Socio-dem",
+                         "Female" = "Socio-dem",                               
+                         "Age" = "Socio-dem",
                          "Tree species richness" = "Biodiversity",
                          "Distance to nearest ebird hotspot" = "Biodiversity",    
                          "Modeled bird Shannon diversity" = "Biodiversity",
@@ -166,7 +166,7 @@ mods_together$group <- recode(mods_together$group,
                          "Distance to green space" = "Biodiversity",
                          "Proportion of blue space" = "Biodiversity",             
                          "Proportion of green space" = "Biodiversity",
-                         "Postal code area" = "Socio-demographic",
+                         "Postal code area" = "Socio-dem",
                          "Non-smoker" = "Health")
 
 
@@ -191,7 +191,7 @@ unique(mods_together_bd$mod)
 
 
 mods_together_bd$mod <- factor(mods_together_bd$mod, levels = c('Biodiversity',
-                                                                'Socio-demographic',
+                                                                'Socio-dem',
                                                                 'Health'))
 
 both_heatmap <- mods_together_bd %>% 
@@ -203,16 +203,17 @@ both_heatmap <- mods_together_bd %>%
             scale_x_discrete(position = "top") +
             scale_fill_gradient2(low = "#fde725", mid = "white",high = "#045275") +
             theme_void() +
-            theme(axis.text=element_text(size=10),
-                  axis.title=element_text(size=10),
+            labs(title = "All data") +
+            theme(axis.text=element_text(size=12),
+                  axis.title=element_text(size=14),
                   plot.title = element_text(hjust = 0.5,
-                                            size = 14),
+                                            size = 14,
+                                            face="bold"),
                   axis.text.y = element_text(hjust = 0.99),
                   legend.position = "none")+
             xlab(" ") +
             ylab(" ") +
-            scale_color_manual(values = c("lightgrey","black")) +
-            ggtitle("All data")
+            scale_color_manual(values = c("lightgrey","black"))
 
 
 ####### Low Data #########
@@ -224,7 +225,7 @@ mod1_low<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_low_ptable_li
 mod1_low$mod='Biodiversity'
 
 mod3_low<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_low_ptable_linear.csv')
-mod3_low$mod='Socio-demographic'
+mod3_low$mod='Socio-dem'
 
 
 mods_low <- bind_rows(mod1_low, mod3_low, mod4_low)
@@ -249,24 +250,24 @@ mods_low$group <- recode(mods_low$group,
                               "Unknown smoking frequency" = "Health",
                               "Weekly alcohol consumption" = "Health",
                               "Daily fruit and vegetable consumption" = "Health",
-                              "Common-law" = "Socio-demographic" ,
-                              "Never Married" = "Socio-demographic",
-                              "Separated" = "Socio-demographic",
-                              "Divorced" = "Socio-demographic",
-                              "Widowed" = "Socio-demographic",
-                              "Unknown marital status" = "Socio-demographic",
-                              "Employed" = "Socio-demographic",
-                              "Unknown employment status" = "Socio-demographic",           
-                              "White" = "Socio-demographic",
-                              "Unknown ethnicity" = "Socio-demographic",
-                              "Non-immigrant (non-white)" = "Socio-demographic",            
-                              "Unknown immigration status" = "Socio-demographic",
-                              "Household income" = "Socio-demographic",
-                              "High school education" = "Socio-demographic",                
-                              "Post-secondary education" = "Socio-demographic",
-                              "Unknown Education status" = "Socio-demographic",
-                              "Female" = "Socio-demographic",                               
-                              "Age" = "Socio-demographic",
+                              "Common-law" = "Socio-dem" ,
+                              "Never Married" = "Socio-dem",
+                              "Separated" = "Socio-dem",
+                              "Divorced" = "Socio-dem",
+                              "Widowed" = "Socio-dem",
+                              "Unknown marital status" = "Socio-dem",
+                              "Employed" = "Socio-dem",
+                              "Unknown employment status" = "Socio-dem",           
+                              "White" = "Socio-dem",
+                              "Unknown ethnicity" = "Socio-dem",
+                              "Non-immigrant (non-white)" = "Socio-dem",            
+                              "Unknown immigration status" = "Socio-dem",
+                              "Household income" = "Socio-dem",
+                              "High school education" = "Socio-dem",                
+                              "Post-secondary education" = "Socio-dem",
+                              "Unknown Education status" = "Socio-dem",
+                              "Female" = "Socio-dem",                               
+                              "Age" = "Socio-dem",
                               "Tree species richness" = "Biodiversity",
                               "Distance to nearest ebird hotspot" = "Biodiversity",    
                               "Modeled bird Shannon diversity" = "Biodiversity",
@@ -276,7 +277,7 @@ mods_low$group <- recode(mods_low$group,
                               "Distance to green space" = "Biodiversity",
                               "Proportion of blue space" = "Biodiversity",             
                               "Proportion of green space" = "Biodiversity",
-                              "Postal code area" = "Socio-demographic",
+                              "Postal code area" = "Socio-dem",
                               "Non-smoker" = "Health")
 
 
@@ -291,7 +292,7 @@ mods_low  <- mods_low %>% filter(variable != "Immigrant (White, <10 years)")
 mods_low_bd <- mods_low %>% 
             filter(group == "Biodiversity")
 
-mods_low_bd$mod <- factor(mods_low_bd$mod, levels = c('Biodiversity','Socio-demographic',
+mods_low_bd$mod <- factor(mods_low_bd$mod, levels = c('Biodiversity','Socio-dem',
                                                                 'Health'
                                                                 ))
 
@@ -311,6 +312,7 @@ low_heatmap <- mods_low_bd %>%
             #scale_x_discrete(position = "top") +
             scale_fill_gradient2(low = "#fde725", mid = "white",high = "#045275") +
             theme_void() +
+            labs(title = "Low SES") +
             theme(plot.title = element_text(hjust = 0.5,
                                             size = 14),
                   legend.position = "none",
@@ -332,7 +334,7 @@ mod1_high<-read.csv('data/model_selection_table_28Jul23/adj_mod1_mh_high_ptable_
 mod1_high$mod='Biodiversity'
 
 mod3_high<-read.csv('data/model_selection_table_28Jul23/adj_mod3_mh_high_ptable_linear.csv')
-mod3_high$mod='Socio-demographic'
+mod3_high$mod='Socio-dem'
 
 
 mods_high <- bind_rows(mod1_high, mod3_high, mod4_high)
@@ -356,24 +358,24 @@ mods_high$group <- recode(mods_high$group,
                          "Unknown smoking frequency" = "Health",
                          "Weekly alcohol consumption" = "Health",
                          "Daily fruit and vegetable consumption" = "Health",
-                         "Common-law" = "Socio-demographic" ,
-                         "Never Married" = "Socio-demographic",
-                         "Separated" = "Socio-demographic",
-                         "Divorced" = "Socio-demographic",
-                         "Widowed" = "Socio-demographic",
-                         "Unknown marital status" = "Socio-demographic",
-                         "Employed" = "Socio-demographic",
-                         "Unknown employment status" = "Socio-demographic",           
-                         "White" = "Socio-demographic",
-                         "Unknown ethnicity" = "Socio-demographic",
-                         "Non-immigrant (non-white)" = "Socio-demographic",            
-                         "Unknown immigration status" = "Socio-demographic",
-                         "Household income" = "Socio-demographic",
-                         "High school education" = "Socio-demographic",                
-                         "Post-secondary education" = "Socio-demographic",
-                         "Unknown Education status" = "Socio-demographic",
-                         "Female" = "Socio-demographic",                               
-                         "Age" = "Socio-demographic",
+                         "Common-law" = "Socio-dem" ,
+                         "Never Married" = "Socio-dem",
+                         "Separated" = "Socio-dem",
+                         "Divorced" = "Socio-dem",
+                         "Widowed" = "Socio-dem",
+                         "Unknown marital status" = "Socio-dem",
+                         "Employed" = "Socio-dem",
+                         "Unknown employment status" = "Socio-dem",           
+                         "White" = "Socio-dem",
+                         "Unknown ethnicity" = "Socio-dem",
+                         "Non-immigrant (non-white)" = "Socio-dem",            
+                         "Unknown immigration status" = "Socio-dem",
+                         "Household income" = "Socio-dem",
+                         "High school education" = "Socio-dem",                
+                         "Post-secondary education" = "Socio-dem",
+                         "Unknown Education status" = "Socio-dem",
+                         "Female" = "Socio-dem",                               
+                         "Age" = "Socio-dem",
                          "Tree species richness" = "Biodiversity",
                          "Tree Shannon diversity" = "Biodiversity",
                          "Distance to nearest ebird hotspot" = "Biodiversity",    
@@ -384,7 +386,7 @@ mods_high$group <- recode(mods_high$group,
                          "Distance to green space" = "Biodiversity",
                          "Proportion of blue space" = "Biodiversity",             
                          "Proportion of green space" = "Biodiversity",
-                         "Postal code area" = "Socio-demographic",
+                         "Postal code area" = "Socio-dem",
                          "Non-smoker" = "Health")
 
 
@@ -401,7 +403,7 @@ mods_high_bd <- mods_high %>%
 
 
 mods_high_bd$mod <- factor(mods_high_bd$mod, levels = c('Biodiversity',
-                                                        'Socio-demographic',
+                                                        'Socio-dem',
                                                       'Health'
                                                       ))
 
