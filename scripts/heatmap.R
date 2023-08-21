@@ -314,15 +314,14 @@ low_heatmap <- mods_low_bd %>%
             theme_void() +
             labs(title = "Low SES") +
             theme(plot.title = element_text(hjust = 0.5,
-                                            size = 14),
+                                            size = 14, face = "bold"),
                   legend.position = "none",
-                        axis.text.x = element_text(size = 10),
+                        axis.text.x = element_text(size = 12),
                         axis.text.y = element_blank(),
                         axis.ticks.y = element_blank())+
             xlab(" ") +
             ylab(" ") +
-            scale_color_manual(values = c("lightgrey", "black")) +
-            ggtitle("Low marginalization")
+            scale_color_manual(values = c("lightgrey", "black")) 
 
 
 ####### High Data #########
@@ -421,16 +420,16 @@ high_heatmap <- mods_high_bd %>%
             scale_x_discrete(position = "top") +
             scale_fill_gradient2(low = "#fde725", mid = "white",high = "#045275") +
             theme_void() +
+            labs(title = "High SES") +
             theme(plot.title = element_text(hjust = 0.5,
-                                            size = 14),
-                  axis.text.x = element_text(size = 10),
+                                            size = 14, face = "bold"),
+                  axis.text.x = element_text(size = 12),
                   # axis.text.y = element_blank(),
                   # axis.ticks.y = element_blank(),
                   legend.position = "none")+
             xlab(" ") +
             ylab(" ") +
-            scale_color_manual(values = c("lightgrey", "black")) +
-            ggtitle("High marginalization")
+            scale_color_manual(values = c("lightgrey", "black")) 
 
 
 # order of models 'biodiversity, socio, health'
@@ -449,8 +448,8 @@ layout <- "
 AAABBBCCCD
 "
 
-heatmap <- both_heatmap + low_heatmap + 
-            high_heatmap + leg_plot + plot_layout(design = layout)
+heatmap <- both_heatmap + high_heatmap + 
+            low_heatmap + plot_layout(design = layout)
 
 ggsave("output/heatmap.jpg", heatmap)
 
