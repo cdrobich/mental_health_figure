@@ -143,6 +143,7 @@ mod4t$variable <- recode(mod4t$variable,
                  "Postal code area" = "Socio-demographic",
                  "Non-smoker" = "Health")
 
+############## Main Figure #####################
 or_MH_plot <- ggplot(data=mod4t, 
                    aes(x=Estimate, y=reorder(X, Estimate),
                        xmin=Estimate-Std..Error,
@@ -157,7 +158,7 @@ or_MH_plot <- ggplot(data=mod4t,
                                         log(0.5),0,log(2),log(5), 
                                         log(10),log(100)),
                                labels=c(0.01,0.1,0.2,0.5,1,2,5,10,100))+
-                        theme_light()+
+                        theme_classic()+
                         geom_vline(xintercept=0, colour='black', 
                                    linetype='dashed',
                                    lwd = 1,
@@ -165,23 +166,24 @@ or_MH_plot <- ggplot(data=mod4t,
                         scale_fill_manual(values = c("#003052", "lightgrey"))+
                         scale_colour_manual(values = labels) +
                         xlab('Odds ratio')+
-            ggtitle("Poor mental health")+
                         ylab(NULL)+
                         geom_hline(yintercept=1, colour='lightgrey')+
                         theme(axis.title=element_text(size=12),
                               axis.text=element_text(size=12),
-                              legend.position = "bottom") +
+                              legend.position = "top") +
                         guides(fill = guide_legend(title = "P < 0.05"),
                               shape = guide_legend(title = "P < 0.05"),
                                 colour = guide_legend(title = "Category")) +
              annotate("rect", xmin = -0.25, xmax = 0.25,
                       ymin = 12.5, ymax = 25.5,
                       alpha = 0.3,
-                      fill = "lightgreen")
+                      fill = "lightgrey")
             
 
 ggsave("output/MH_oddsratio.jpg")
 
+
+####### extras ###########
 biodiversity <- mod4t %>% 
             filter(variable == "Biodiversity") %>% 
             ggplot(aes(x=Estimate, y=reorder(X, Estimate),
@@ -255,7 +257,7 @@ sig_plot <- mod4t %>%
 
 ggsave("output/MH_sigp_oddsratio.jpg")
 
-
+######### Biodiversity effect sizes inset ################
 mod4t %>% filter(variable == "Biodiversity")
 
 list <- c("Tree species richness", "Distance to nearest ebird hotspot", "Modeled bird Shannon diversity",
@@ -272,14 +274,11 @@ limit <- mod4t %>% filter(X %in% list) %>%
                        colour = variable))+
             geom_errorbar(lwd = 1)+
             geom_point(size = 2, stroke = 1.5, shape = 21)+
-            #scale_x_continuous(limits=c(-0.5,0.5))+
-            # breaks=c(log(0.01),
-            #          log(0.1),log(0.2),
-            #          log(0.5),0,log(2),log(5),
-            #          log(10),log(100)),
-            # labels=c(0.01,0.1,0.2,0.5,1,2,5,10,100))+
-            theme_light()+
-            geom_vline(xintercept=1, colour='black', 
+            scale_x_continuous(limits=c(-0.85,1.05), 
+                               breaks=c(0),
+                               labels=c(1)) +
+            theme_classic()+
+            geom_vline(xintercept=0, colour='black', 
                        linetype='dashed',
                        lwd = 1,
                        alpha = 0.45)+
@@ -288,14 +287,17 @@ limit <- mod4t %>% filter(X %in% list) %>%
             xlab('Odds ratio')+
             #ggtitle("Poor mental health")+
             ylab(NULL)+
-            geom_hline(yintercept=1, colour='lightgrey')+
             theme(axis.title=element_text(size=10),
                   axis.text=element_text(size=10),
-                  legend.position = "none") +
+                  legend.position = "none",
+                  panel.background = element_rect(fill = "#F2F2F2")) +
             guides(colour = guide_legend(title = "Category"),
                    fill = guide_legend(title = "Category")) +
             theme(plot.background = element_rect(colour = "black", 
                                                  size=1))
+
+
+
 
 library(patchwork)
 
