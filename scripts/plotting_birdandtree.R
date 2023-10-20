@@ -145,9 +145,9 @@ mod4t$variable <- recode(mod4t$variable,
 
 ############## Main Figure #####################
 or_MH_plot <- ggplot(data=mod4t, 
-                   aes(x=Estimate, y=reorder(X, Estimate),
-                       xmin=Estimate-Std..Error,
-                       xmax=Estimate+Std..Error,
+                   aes(x=-1*Estimate, y=reorder(X, -1*Estimate),
+                       xmin=-1*(Estimate-Std..Error),
+                       xmax=-1*(Estimate+Std..Error),
                        fill=Pr...z..<0.05,
                        colour = variable))+
                         geom_errorbar(lwd = 1)+
@@ -167,7 +167,6 @@ or_MH_plot <- ggplot(data=mod4t,
                         scale_colour_manual(values = labels) +
                         xlab('Odds ratio')+
                         ylab(NULL)+
-                        geom_hline(yintercept=1, colour='lightgrey')+
                         theme(axis.title=element_text(size=12),
                               axis.text=element_text(size=12),
                               legend.position = "top") +
@@ -186,9 +185,9 @@ ggsave("output/MH_oddsratio.jpg")
 ####### extras ###########
 biodiversity <- mod4t %>% 
             filter(variable == "Biodiversity") %>% 
-            ggplot(aes(x=Estimate, y=reorder(X, Estimate),
-                         xmin=Estimate-Std..Error,
-                         xmax=Estimate+Std..Error,
+            ggplot(aes(x=-1*Estimate, y=reorder(X, -1*Estimate),
+                         xmin=-1*(Estimate-Std..Error),
+                         xmax=-1*(Estimate+Std..Error),
                          fill=Pr...z..<0.05,
                          colour = variable))+
             geom_errorbar(lwd = 1)+
@@ -210,7 +209,6 @@ biodiversity <- mod4t %>%
             xlab('Odds ratio')+
             ggtitle("Poor mental health")+
             ylab(NULL)+
-            geom_hline(yintercept=1, colour='lightgrey')+
             theme(axis.title=element_text(size=12),
                   axis.text=element_text(size=12)) +
             guides(fill = guide_legend(title = "P < 0.05"),
@@ -224,9 +222,9 @@ ggsave("output/MH_biodiversity_oddsratio.jpg")
 
 sig_plot <- mod4t %>% 
             filter(Pr...z.. < 0.05) %>% 
-            ggplot(aes(x=Estimate, y=reorder(X, Estimate),
-                       xmin=Estimate-Std..Error,
-                       xmax=Estimate+Std..Error,
+            ggplot(aes(x=-1*Estimate, y=reorder(X, -1*Estimate),
+                       xmin=-1*(Estimate-Std..Error),
+                       xmax=-1*(Estimate+Std..Error),
                        fill = variable,
                        colour = variable))+
             geom_errorbar(lwd = 1)+
@@ -248,7 +246,6 @@ sig_plot <- mod4t %>%
             xlab('Odds ratio')+
             ggtitle("Poor mental health")+
             ylab(NULL)+
-            geom_hline(yintercept=1, colour='lightgrey')+
             theme(axis.title=element_text(size=12),
                   axis.text=element_text(size=12)) +
             guides(colour = guide_legend(title = "Category"),
@@ -267,16 +264,16 @@ list <- c("Tree species richness", "Distance to nearest ebird hotspot", "Modeled
 
 
 limit <- mod4t %>% filter(X %in% list) %>% 
-            ggplot(aes(x=Estimate, y=reorder(X, Estimate),
-                       xmin=Estimate-Std..Error,
-                       xmax=Estimate+Std..Error,
+            ggplot(aes(x=-1*Estimate, y=reorder(X, -1*Estimate),
+                       xmin=-1*(Estimate-Std..Error),
+                       xmax=-1*(Estimate+Std..Error),
                        fill=Pr...z..<0.05,
                        colour = variable))+
             geom_errorbar(lwd = 1)+
             geom_point(size = 2, stroke = 1.5, shape = 21)+
-            scale_x_continuous(limits=c(-0.85,1.05), 
-                               breaks=c(0),
-                               labels=c(1)) +
+            scale_x_continuous(limits=c(-0.25,0.25), 
+                               breaks=c(log(0.8),log(0.9),0, log(1.1),log(1.2)),
+                               labels=c(0.8,0.9,1, 1.1,1.2)) +
             theme_classic()+
             geom_vline(xintercept=0, colour='black', 
                        linetype='dashed',
@@ -372,15 +369,15 @@ mod4i$variable <- recode(mod4t$variable,
                          "Proportion of blue space" = "Biodiversity",             
                          "Proportion of green space" = "Biodiversity",
                          "Postal code area" = "Socio-demographic",
-                         "Non-smoker" = "Health")
+                         "Non-smoker" = " Health")
 
 
 unique(mod4i$variable)
 
 or_stress_plot <- ggplot(data=mod4i, 
-       aes(x=Estimate, y=reorder(X, Estimate), 
-           xmin=Estimate-Std..Error,
-           xmax=Estimate+Std..Error, 
+       aes(x=-1*Estimate, y=reorder(X, -1*Estimate), 
+           xmin=-1*(Estimate-Std..Error),
+           xmax=-1*(Estimate+Std..Error), 
            fill=Pr...z..<0.05,
            shape=Pr...z..<0.05,
            colour = variable))+
@@ -388,10 +385,10 @@ or_stress_plot <- ggplot(data=mod4i,
             geom_errorbar(lwd = 1) +
             geom_point(size = 3, stroke = 1.5) +
              scale_x_continuous(limits=c(-2,2), 
-                               breaks=c(log(0.01),log(0.1),log(0.2), 
+                               breaks=c(log(0.1),log(0.2), 
                                         log(0.5),0,log(2),log(5), 
-                                        log(10)),
-                                labels=c(0.01,0.1,0.2,0.5,1,2,5,10))+
+                                        log(10), log(100)),
+                                labels=c(0.1,0.2,0.5,1,2,5,10,100))+
             geom_vline(xintercept=0, colour='black', 
                        linetype='dashed',
                        lwd = 1,
@@ -402,7 +399,6 @@ or_stress_plot <- ggplot(data=mod4i,
             xlab('Odds ratio')+
             ggtitle('High perceived life stress') +
             ylab(NULL)+
-            geom_hline(yintercept = 39, colour='lightgrey' )+
             theme(axis.title=element_text(size=14),
                                axis.text=element_text(size=12)) +
             theme(axis.title=element_text(size=12),

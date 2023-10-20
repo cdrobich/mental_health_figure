@@ -54,7 +54,7 @@ x2<-seq(-0.5,6, length.out=200)
 
 logitify <- function(int,slope,x = seq(-3,3, length.out=200)) {
             z<-(int+(slope)*x)
-            return(exp(z)/(1+exp(z)))
+            return(exp(-1*z)/(1+exp(-1*z)))
 }
 
 
@@ -183,7 +183,7 @@ both_data_bird$SEmin_mod3 <- logitify(mod3_socio$Estimate[which(mod3_socio$X=='(
 
 
 
-both_data_bird$x <- x*as.numeric(desc_both$Standard.Deviation[which(desc_both$count.26219=='ModeledSDiv')])+as.numeric(desc_both$Mean[which(desc_both$count.26219=='ModeledSDiv')])
+both_data_bird$x <- x1*as.numeric(desc_both$Standard.Deviation[which(desc_both$count.26219=='ModeledSDiv')])+as.numeric(desc_both$Mean[which(desc_both$count.26219=='ModeledSDiv')])
 
 
 head(both_data_bird)
@@ -320,7 +320,7 @@ low_data_bird$SEmin_mod3 <- logitify(mod3_low$Estimate[which(mod3_low$X=='(Inter
                                      ,mod3_low$Estimate[which(mod3_low$X=='ModeledSDiv')]-
                                                  mod3_low$Std..Error[which(mod3_low$X=='ModeledSDiv')])
 
-low_data_bird$x <-x*as.numeric(desc_low$Standard.Deviation[which(desc_low$X=='ModeledSDiv')])+as.numeric(desc_low$Mean[which(desc_low$X=='ModeledSDiv')])
+low_data_bird$x <-x1*as.numeric(desc_low$Standard.Deviation[which(desc_low$X=='ModeledSDiv')])+as.numeric(desc_low$Mean[which(desc_low$X=='ModeledSDiv')])
 
 lowdata_bird <- low_data_bird %>% 
             pivot_longer(
@@ -465,7 +465,7 @@ high_data_bird$SEmin_mod3 <- logitify(mod3_high$Estimate[which(mod3_high$X=='(In
                                      ,mod3_high$Estimate[which(mod3_high$X=='ModeledSDiv')]-
                                                  mod3_high$Std..Error[which(mod3_high$X=='ModeledSDiv')])
 
-high_data_bird$x <-  x*as.numeric(desc_low$Standard.Deviation[which(desc_low$X=='ModeledSDiv')])+as.numeric(desc_low$Mean[which(desc_low$X=='ModeledSDiv')])
+high_data_bird$x <-  x1*as.numeric(desc_low$Standard.Deviation[which(desc_low$X=='ModeledSDiv')])+as.numeric(desc_low$Mean[which(desc_low$X=='ModeledSDiv')])
 
 highdata_bird <- high_data_bird %>% 
             pivot_longer(
@@ -513,7 +513,7 @@ both_tree_plot <- ggplot(both_tree, aes(x=x, y=probability, ymin=SEmin, ymax=SEm
                                       fill=model, linetype=model, colour = model)) + 
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Tree Richness") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -527,7 +527,7 @@ both_bird_plot <- ggplot(both_bird, aes(x=x, y=probability, ymin=SEmin, ymax=SEm
                                         fill=model, linetype=model, colour = model)) + 
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Bird Diversity") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -542,7 +542,7 @@ low_tree_plot <- ggplot(low_tree, aes(x=x, y=probability, ymin=SEmin, ymax=SEmax
                                       fill=model, linetype=model, colour = model)) + 
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Tree Richness") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -557,7 +557,7 @@ low_bird_plot <- ggplot(low_bird, aes(x=x, y=probability, ymin=SEmin, ymax=SEmax
                      fill=model, linetype=model, colour = model)) + 
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) +
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Bird Diversity") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -571,7 +571,7 @@ high_tree_plot <- ggplot(high_tree, aes(x=x, y=probability, ymin=SEmin, ymax=SEm
                                         fill=model, linetype=model, colour = model)) + 
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Tree Richness") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -585,7 +585,7 @@ high_bird_plot <- ggplot(high_bird, aes(x=x, y=probability, ymin=SEmin, ymax=SEm
                                         fill=model, linetype=model, colour = model)) + 
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
-            ylab("Probability of poor mental health") +
+            ylab("Probability of goox mental health") +
             xlab("Bird Diversity") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -620,7 +620,7 @@ both_tree_plot_fw <- ggplot(both_tree, aes(x=x, y=probability, ymin=SEmin, ymax=
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
             facet_wrap(~model) +
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Tree Richness") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -635,7 +635,7 @@ both_bird_plot_fw <- ggplot(both_bird, aes(x=x, y=probability, ymin=SEmin, ymax=
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
             facet_wrap(~model) +
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Bird Diversity") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -651,7 +651,7 @@ low_tree_plot_fw <- ggplot(low_tree, aes(x=x, y=probability, ymin=SEmin, ymax=SE
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
             facet_wrap(~model) + 
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Tree Richness") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -667,7 +667,7 @@ low_bird_plot_fw <- ggplot(low_bird, aes(x=x, y=probability, ymin=SEmin, ymax=SE
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
             facet_wrap(~model) +
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Bird Diversity") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -682,7 +682,7 @@ high_tree_plot_fw <- ggplot(high_tree, aes(x=x, y=probability, ymin=SEmin, ymax=
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
             facet_wrap(~model) + 
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Tree Richness") +
             theme_light()+
             theme(axis.title=element_text(size=10),
@@ -698,7 +698,7 @@ high_bird_plot_fw <- ggplot(high_bird, aes(x=x, y=probability, ymin=SEmin, ymax=
             geom_ribbon(alpha = 0.6, size = 0.5) + 
             geom_line(lwd = 1.5) + 
             facet_wrap(~model) + 
-            ylab("Probability of poor mental health") +
+            ylab("Probability of good mental health") +
             xlab("Bird Diversity") +
             theme_light()+
             theme(axis.title=element_text(size=10),

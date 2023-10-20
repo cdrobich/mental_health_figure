@@ -1,6 +1,5 @@
 library(tidyverse)
 library(viridis)
-
 library(stringr)                   # Load stringr
 
 
@@ -65,20 +64,20 @@ melted_cormat <- melt(upper_tri,
 # Heatmap
 
 
-ggplot(ggplot(data=melted_cormat[melted_cormat$value != 1 & 
-                                             abs(melted_cormat$value) > 0.3,],
-              aes(Var2, Var1, fill=value)))+
-            eom_tile(color="white")+
-            scale_fill_gradient2(low="blue", high="red", mid="white", 
-                                 midpoint=0, limit=c(-1,1), space="Lab", 
-                                 name="Pearson\nCorrelation")+
-            ggtitle("Title")+
-            xlab("V1")+
-            ylab("V2")+
-            theme_minimal()+ 
-            theme(axis.text.x=element_text(angle=90, vjust=0.5, 
-                                           size=10, hjust=1))+
-            coord_fixed()
+# ggplot(ggplot(data=melted_cormat[melted_cormat$value != 1 & 
+#                                              abs(melted_cormat$value) > 0.3,],
+#               aes(Var2, Var1, fill=value)))+
+#             eom_tile(color="white")+
+#             scale_fill_gradient2(low="blue", high="red", mid="white", 
+#                                  midpoint=0, limit=c(-1,1), space="Lab", 
+#                                  name="Pearson\nCorrelation")+
+#             ggtitle("Title")+
+#             xlab("V1")+
+#             ylab("V2")+
+#             theme_minimal()+ 
+#             theme(axis.text.x=element_text(angle=90, vjust=0.5, 
+#                                            size=10, hjust=1))+
+#             coord_fixed()
 
 
 
@@ -175,7 +174,7 @@ mods_together <- rename(mods_together,
                  P = Pr...z..,
                  std.error = Std..Error)
 
-write.csv(mod4_biodiversity,"data/adj_mod134_mh_both_ptable_mice_linear_heatmap.csv")
+write.csv(mods_together,"data/adj_mod134_mh_both_ptable_mice_linear_heatmap.csv")
 
 
 ####### Both data figures #######
@@ -195,9 +194,9 @@ mods_together_bd$mod <- factor(mods_together_bd$mod, levels = c('Biodiversity',
                                                               'Socio-demographic',   'Health'))
 
 both_heatmap <- mods_together_bd %>% 
-            ggplot(aes(mod,variable, fill = Estimate)) +
+            ggplot(aes(mod,variable, fill = -1*Estimate)) +
             geom_tile() +
-            geom_text(aes(label = round(Estimate, 2),
+            geom_text(aes(label = round(-1*Estimate, 2),
                           colour = P < 0.05),
                       size = 5) +
             scale_x_discrete(position = "top") +
@@ -302,9 +301,9 @@ mods_low_sig <- mods_low_bd %>%
             filter(P < 0.05)
 
 low_heatmap <- mods_low_bd %>% 
-            ggplot(aes(mod, variable, fill = Estimate)) +
+            ggplot(aes(mod, variable, fill = -1*Estimate)) +
             geom_tile() +
-            geom_text(aes(label = round(Estimate, 2),
+            geom_text(aes(label = round(-1*Estimate, 2),
                           colour = P < 0.05),
                       size = 5) +
             scale_x_discrete(position = "top") +
@@ -408,9 +407,9 @@ mods_high_sig <- mods_high_bd %>%
             filter(P < 0.05)
 
 high_heatmap <- mods_high_bd %>% 
-            ggplot(aes(mod, variable, fill = Estimate)) +
+            ggplot(aes(mod, variable, fill = -1*Estimate)) +
             geom_tile() +
-            geom_text(aes(label = round(Estimate, 2),
+            geom_text(aes(label = round(-1*Estimate, 2),
                           colour = P < 0.05),
                       size = 5) +
             scale_x_discrete(position = "top") +
